@@ -20,19 +20,20 @@ pip install --no-build-isolation .
 mkdir -p ./downloads/t5_pretrained/t5-v1_1-xxl
 mkdir -p ./downloads/vae
 mkdir -p ./downloads/magi/4.5B_base
-cd ./downloads/t5_pretrained/t5-v1_1-xxl
+cd /workspace/MAGI-1/downloads/t5_pretrained/t5-v1_1-xxl
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/config.json
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00001-of-00002.bin
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00002-of-00002.bin
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/tokenizer.json
-cd ./downloads/vae
+cd /workspace/MAGI-1/downloads/vae
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/config.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/diffusion_pytorch_model.bin
-cd ./downloads/magi/4.5B_base
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/config.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/pytorch_model-00001-of-00002.bin
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/pytorch_model-00002-of-00002.bin
-cd ../
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/diffusion_pytorch_model.safetensors
+cd /workspace/MAGI-1/downloads/magi/4.5B_base
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model.safetensors.index.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00001-of-00003.safetensors
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00002-of-00003.safetensors
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00003-of-00003.safetensors
+cd /workspace/MAGI-1/
 ```
 
 ![magi-logo](figures/logo_black.png)
