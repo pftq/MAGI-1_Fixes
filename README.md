@@ -1,3 +1,40 @@
+Changes by pftq:
+- Fixed incorrect CUDA_VISIBLE_DEVICES setting in 4.5B run script (should be 0 for single-gpu, not 1).
+
+Easy instructions for Runpod install (including downloading all huggingface model files):
+```
+python -m venv venv
+source /workspace/venv/bin/activate
+pip install torch==2.4.0+cu124 torchvision==0.19.0 torchaudio==2.4.0
+pip install ffmpeg
+git clone https://github.com/SandAI-org/MAGI-1
+cd MAGI-1
+pip install --upgrade wheel setuptools setuptools_scm
+pip install packaging
+pip install flash-attn --no-build-isolation
+pip install -r requirements.txt --no-build-isolation #exclude flash-attn
+git clone https://github.com/SandAI-org/MagiAttention
+cd MagiAttention
+git submodule update --init --recursive
+pip install --no-build-isolation .
+mkdir -p ./downloads/t5_pretrained/t5-v1_1-xxl
+mkdir -p ./downloads/vae
+mkdir -p ./downloads/magi/4.5B_base
+cd ./downloads/t5_pretrained/t5-v1_1-xxl
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/config.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00001-of-00002.bin
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00002-of-00002.bin
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/tokenizer.json
+cd ./downloads/vae
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/config.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/diffusion_pytorch_model.bin
+cd ./downloads/magi/4.5B_base
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/config.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/pytorch_model-00001-of-00002.bin
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/pytorch_model-00002-of-00002.bin
+cd ../
+```
+
 ![magi-logo](figures/logo_black.png)
 
 
