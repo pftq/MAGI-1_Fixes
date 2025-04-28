@@ -6,6 +6,7 @@ Easy instructions for Runpod install (including downloading all huggingface mode
 #create once on new pod
 export HF_HOME=/workspace/
 export TZ=America/Los_Angeles
+
 python -m venv venv
 source /workspace/venv/bin/activate
 pip install torch==2.4.0+cu124 torchvision==0.19.0 torchaudio==2.4.0
@@ -27,7 +28,10 @@ cd /workspace/MAGI-1/downloads/t5_pretrained/t5-v1_1-xxl
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/config.json
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00001-of-00002.bin
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00002-of-00002.bin
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/tokenizer.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/tokenizer_config.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/spiece.model
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/special_tokens_map.json
+wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model.bin.index.json
 cd /workspace/MAGI-1/downloads/vae
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/config.json
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/diffusion_pytorch_model.safetensors
@@ -70,6 +74,7 @@ python3 inference/pipeline/entry.py \
     --prompt "Good Boy" \
     --output_path example/assets/output_t2v.mp4 \
     2>&1 | tee $LOG_DIR
+
 ```
 
 ![magi-logo](figures/logo_black.png)
