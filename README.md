@@ -3,7 +3,6 @@ Changes by pftq:
 
 Easy instructions for Runpod install (including downloading all huggingface model files). Note I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
 ```
-#create once on new pod
 export HF_HOME=/workspace/
 export TZ=America/Los_Angeles
 
@@ -21,6 +20,7 @@ git clone https://github.com/SandAI-org/MagiAttention
 cd MagiAttention
 git submodule update --init --recursive
 pip install --no-build-isolation .
+cd ../
 pip3 install --upgrade huggingface_hub[hf_transfer]
 export HF_HUB_ENABLE_HF_TRANSFER=1
 huggingface-cli download sand-ai/MAGI-1 \
@@ -35,6 +35,9 @@ huggingface-cli download sand-ai/MAGI-1 \
   --local-dir ./downloads/magi/4.5B_base \
   --include "ckpt/magi/4.5B_base/*" \
   --local-dir-use-symlinks False
+mv ./downloads/t5_pretrained/t5-v1_1-xxl/ckpt/t5/t5-v1_1-xxl/* ./downloads/t5_pretrained/t5-v1_1-xxl/
+mv ./downloads/vae/ckpt/vae/* ./downloads/vae/
+mv ./downloads/magi/4.5B_base/ckpt/magi/4.5B_base/inference_weight/* ./downloads/magi/4.5B_base/
 
 #always run at the start to use persisting drive
 export HF_HOME=/workspace/
