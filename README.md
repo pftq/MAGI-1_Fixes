@@ -80,7 +80,7 @@ python3 inference/pipeline/entry.py \
     --config_file example/4.5B/4.5B_config.json \
     --mode t2v \
     --prompt "Good Boy" \
-    --output_path example/assets/output_t2v.mp4 \
+    --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-t2v.mp4 \
     2>&1 | tee $LOG_DIR
 
 
