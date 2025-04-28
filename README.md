@@ -23,7 +23,8 @@ cd MAGI-1
 pip install --upgrade wheel setuptools setuptools_scm
 pip install packaging
 pip install flash-attn --no-build-isolation
-pip install -r requirements.txt --no-build-isolation #exclude flash-attn
+sed -i '/flash-attn/d' requirements.txt # exclude flash-attn from requirements
+pip install -r requirements.txt --no-build-isolation
 git clone https://github.com/SandAI-org/MagiAttention
 cd MagiAttention
 git submodule update --init --recursive
