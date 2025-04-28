@@ -1,15 +1,21 @@
 Changes by pftq:
 - Fixed incorrect CUDA_VISIBLE_DEVICES setting in 4.5B run script (should be 0 for single-gpu, not 1).
 
-Easy instructions for Runpod on PyTorch 2.4 template (including downloading all huggingface model files). Note I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
+Easy instructions for Runpod on PyTorch 2.4 template (including downloading all huggingface model files).
+- I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
+- ffmpeg needs to be installed as an app as well (apt-get) - it's not enough just to do pip install ffmpeg.  This mistake especially nasty because you'll only find out after waiting 2 hours for a render and it fails at the end.
 ```
+#create once on new pod
 export HF_HOME=/workspace/
 export TZ=America/Los_Angeles
 
 python -m venv venv
 source /workspace/venv/bin/activate
 pip install torch==2.4.0+cu124 torchvision==0.19.0 torchaudio==2.4.0
+apt-get update
+apt-get install -y ffmpeg
 pip install ffmpeg
+pip install ffmpeg-python
 git clone https://github.com/SandAI-org/MAGI-1
 cd MAGI-1
 pip install --upgrade wheel setuptools setuptools_scm
@@ -38,13 +44,18 @@ huggingface-cli download sand-ai/MAGI-1 \
 mv ./downloads/t5_pretrained/t5-v1_1-xxl/ckpt/t5/t5-v1_1-xxl/* ./downloads/t5_pretrained/t5-v1_1-xxl/
 mv ./downloads/vae/ckpt/vae/* ./downloads/vae/
 mv ./downloads/4.5B_base/ckpt/magi/4.5B_base/* ./downloads/4.5B_base/
-
+```
+```
 #always run at the start to use persisting drive
 export HF_HOME=/workspace/
 export TZ=America/Los_Angeles
 source /workspace/venv/bin/activate
+apt-get update
+apt-get install -y ffmpeg
+pip install ffmpeg-python
 cd /workspace/MAGI-1
-
+```
+```
 #example
 export MASTER_ADDR=localhost
 export MASTER_PORT=6009
