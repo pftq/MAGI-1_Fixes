@@ -1,7 +1,7 @@
 Changes by pftq:
 - Fixed incorrect CUDA_VISIBLE_DEVICES setting in 4.5B run script (should be 0 for single-gpu, not 1).
 
-Easy instructions for Runpod install (including downloading all huggingface model files):
+Easy instructions for Runpod install (including downloading all huggingface model files). Note I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
 ```
 #create once on new pod
 export HF_HOME=/workspace/
