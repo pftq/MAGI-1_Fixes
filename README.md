@@ -3,6 +3,9 @@ Changes by pftq:
 
 Easy instructions for Runpod install (including downloading all huggingface model files):
 ```
+#create once on new pod
+export HF_HOME=/workspace/
+export TZ=America/Los_Angeles
 python -m venv venv
 source /workspace/venv/bin/activate
 pip install torch==2.4.0+cu124 torchvision==0.19.0 torchaudio==2.4.0
@@ -34,6 +37,39 @@ wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/infe
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00002-of-00003.safetensors
 wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00003-of-00003.safetensors
 cd /workspace/MAGI-1/
+
+#always run at the start to use persisting drive
+export HF_HOME=/workspace/
+export TZ=America/Los_Angeles
+source /workspace/venv/bin/activate
+cd /workspace/MAGI-1
+
+#example
+export MASTER_ADDR=localhost
+export MASTER_PORT=6009
+export GPUS_PER_NODE=1
+export NNODES=1
+export WORLD_SIZE=1
+export CUDA_VISIBLE_DEVICES=0
+
+export PAD_HQ=1
+export PAD_DURATION=1
+
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OFFLOAD_T5_CACHE=true
+export OFFLOAD_VAE_CACHE=true
+export TORCH_CUDA_ARCH_LIST="8.9;9.0"
+
+MAGI_ROOT=$(git rev-parse --show-toplevel)
+LOG_DIR=log_$(date "+%Y-%m-%d_%H:%M:%S").log
+
+export PYTHONPATH="$MAGI_ROOT:$PYTHONPATH"
+python3 inference/pipeline/entry.py \
+    --config_file example/4.5B/4.5B_config.json \
+    --mode t2v \
+    --prompt "Good Boy" \
+    --output_path example/assets/output_t2v.mp4 \
+    2>&1 | tee $LOG_DIR
 ```
 
 ![magi-logo](figures/logo_black.png)
