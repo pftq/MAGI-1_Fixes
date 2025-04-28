@@ -1,6 +1,7 @@
 Changes by pftq:
 - Fixed incorrect CUDA_VISIBLE_DEVICES setting in 4.5B run script (should be 0 for single-gpu, not 1).
 - Incorrect distill and fp8 settings in config for 24B script (looks for distill/fp8 files in the 24B_base folder).
+- cfg_number needs to be set to 3 for 24B config or else it'll error with "Please set `cfg_number: 3` in config.json for base model"
 
 Easy instructions for Runpod on PyTorch 2.4 template (including downloading all huggingface model files).
 - I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
