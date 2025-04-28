@@ -45,6 +45,16 @@ mv ./downloads/t5_pretrained/t5-v1_1-xxl/ckpt/t5/t5-v1_1-xxl/* ./downloads/t5_pr
 mv ./downloads/vae/ckpt/vae/* ./downloads/vae/
 mv ./downloads/4.5B_base/ckpt/magi/4.5B_base/* ./downloads/4.5B_base/
 ```
+
+If trying to use the 24b model instead:
+```
+huggingface-cli download sand-ai/MAGI-1 \
+  --local-dir ./downloads/24B_base \
+  --include "ckpt/magi/24B_base/*" \
+  --local-dir-use-symlinks False
+mv ./downloads/24B_base/ckpt/magi/24B_base/* ./downloads/24B_base/
+```
+
 ```
 #always run at the start to use persisting drive
 export HF_HOME=/workspace/
@@ -55,6 +65,8 @@ apt-get install -y ffmpeg
 pip install ffmpeg-python
 cd /workspace/MAGI-1
 ```
+
+
 ```
 #example
 export MASTER_ADDR=localhost
