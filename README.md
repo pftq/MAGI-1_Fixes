@@ -37,7 +37,7 @@ huggingface-cli download sand-ai/MAGI-1 \
   --local-dir-use-symlinks False
 mv ./downloads/t5_pretrained/t5-v1_1-xxl/ckpt/t5/t5-v1_1-xxl/* ./downloads/t5_pretrained/t5-v1_1-xxl/
 mv ./downloads/vae/ckpt/vae/* ./downloads/vae/
-mv ./downloads/magi/4.5B_base/ckpt/magi/4.5B_base/inference_weight/* ./downloads/magi/4.5B_base/
+mv ./downloads/magi/4.5B_base/ckpt/magi/4.5B_base/* ./downloads/magi/4.5B_base/
 
 #always run at the start to use persisting drive
 export HF_HOME=/workspace/
