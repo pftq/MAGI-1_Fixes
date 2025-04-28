@@ -21,26 +21,20 @@ git clone https://github.com/SandAI-org/MagiAttention
 cd MagiAttention
 git submodule update --init --recursive
 pip install --no-build-isolation .
-mkdir -p ./downloads/t5_pretrained/t5-v1_1-xxl
-mkdir -p ./downloads/vae
-mkdir -p ./downloads/magi/4.5B_base
-cd /workspace/MAGI-1/downloads/t5_pretrained/t5-v1_1-xxl
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/config.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00001-of-00002.bin
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model-00002-of-00002.bin
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/tokenizer_config.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/spiece.model
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/special_tokens_map.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/t5/t5-v1_1-xxl/pytorch_model.bin.index.json
-cd /workspace/MAGI-1/downloads/vae
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/config.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/vae/diffusion_pytorch_model.safetensors
-cd /workspace/MAGI-1/downloads/magi/4.5B_base
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model.safetensors.index.json
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00001-of-00003.safetensors
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00002-of-00003.safetensors
-wget https://huggingface.co/sand-ai/MAGI-1/resolve/main/ckpt/magi/4.5B_base/inference_weight/model-00003-of-00003.safetensors
-cd /workspace/MAGI-1/
+pip3 install --upgrade huggingface_hub[hf_transfer]
+export HF_HUB_ENABLE_HF_TRANSFER=1
+huggingface-cli download sand-ai/MAGI-1 \
+  --local-dir ./downloads/t5_pretrained/t5-v1_1-xxl \
+  --include "ckpt/t5/t5-v1_1-xxl/*" \
+  --local-dir-use-symlinks False
+huggingface-cli download sand-ai/MAGI-1 \
+  --local-dir ./downloads/vae \
+  --include "ckpt/vae/*" \
+  --local-dir-use-symlinks False
+huggingface-cli download sand-ai/MAGI-1 \
+  --local-dir ./downloads/magi/4.5B_base \
+  --include "ckpt/magi/4.5B_base/*" \
+  --local-dir-use-symlinks False
 
 #always run at the start to use persisting drive
 export HF_HOME=/workspace/
@@ -74,6 +68,7 @@ python3 inference/pipeline/entry.py \
     --prompt "Good Boy" \
     --output_path example/assets/output_t2v.mp4 \
     2>&1 | tee $LOG_DIR
+
 
 ```
 
