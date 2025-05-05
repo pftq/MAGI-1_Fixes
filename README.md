@@ -13,7 +13,7 @@ export TZ=America/Los_Angeles
 
 python -m venv venv
 source /workspace/venv/bin/activate
-pip install torch==2.4.0+cu124 torchvision==0.19.0 torchaudio==2.4.0
+pip install torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0
 apt-get update
 apt-get install -y ffmpeg
 pip install ffmpeg
