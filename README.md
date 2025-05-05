@@ -71,7 +71,7 @@ cd /workspace/MAGI-1
 
 
 ```
-#example
+#single-gpu 4.5B
 export MASTER_ADDR=localhost
 export MASTER_PORT=6009
 export GPUS_PER_NODE=1
@@ -99,6 +99,40 @@ python3 inference/pipeline/entry.py \
     2>&1 | tee $LOG_DIR
 
 
+```
+
+```
+#multi-gpu 24B
+export CUDA_DEVICE_MAX_CONNECTIONS=1
+export NCCL_ALGO=^NVLS
+
+export PAD_HQ=1
+export PAD_DURATION=1
+
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OFFLOAD_T5_CACHE=true
+export OFFLOAD_VAE_CACHE=true
+export TORCH_CUDA_ARCH_LIST="8.9;9.0"
+
+GPUS_PER_NODE=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l)
+DISTRIBUTED_ARGS="
+    --rdzv-backend=c10d \
+    --rdzv-endpoint=localhost:6009 \
+    --nnodes=1 \
+    --nproc_per_node=$GPUS_PER_NODE
+"
+
+MAGI_ROOT=$(git rev-parse --show-toplevel)
+LOG_DIR=log_$(date "+%Y-%m-%d_%H:%M:%S").log
+
+export PYTHONPATH="$MAGI_ROOT:$PYTHONPATH"
+torchrun $DISTRIBUTED_ARGS inference/pipeline/entry.py \
+    --config_file example/24B/24B_config.json \
+    --mode v2v \
+    --prefix_video_path 2025-03-07_03-03-52-2_2.mp4 \
+    --prompt "" \
+    --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-i2v.mp4 \
+    2>&1 | tee $LOG_DIR
 ```
 
 ![magi-logo](figures/logo_black.png)
