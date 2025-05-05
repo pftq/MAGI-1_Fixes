@@ -18,7 +18,8 @@ apt-get update
 apt-get install -y ffmpeg
 pip install ffmpeg
 pip install ffmpeg-python
-git clone https://github.com/SandAI-org/MAGI-1
+git clone https://github.com/pftq/MAGI-1_Fixes/
+mv MAGI-1_Fixes MAGI-1
 cd MAGI-1
 pip install --upgrade wheel setuptools setuptools_scm
 pip install packaging
