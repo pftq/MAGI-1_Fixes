@@ -129,9 +129,9 @@ export PYTHONPATH="$MAGI_ROOT:$PYTHONPATH"
 torchrun $DISTRIBUTED_ARGS inference/pipeline/entry.py \
     --config_file example/24B/24B_config.json \
     --mode v2v \
-    --prefix_video_path 2025-03-07_03-03-52-2_2.mp4 \
+    --prefix_video_path sample.mp4 \
     --prompt "" \
-    --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-i2v.mp4 \
+    --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-v2v.mp4 \
     2>&1 | tee $LOG_DIR
 ```
 
