@@ -6,6 +6,7 @@ Changes by pftq:
 Easy instructions for Runpod on PyTorch 2.4 template (including downloading all huggingface model files).
 - I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
 - ffmpeg needs to be installed as an app as well (apt-get) - it's not enough just to do pip install ffmpeg.  This mistake especially is nasty because you'll only find out after waiting 2 hours for a render and it fails at the end.
+- if you get stuck waiting for magiattention to be installed, make sure you have enough CPU RAM. On Runpod, anything less than the H100 pod will run out of RAM and freeze.
 ```
 #create once on new pod
 export HF_HOME=/workspace/
