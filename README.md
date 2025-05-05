@@ -32,7 +32,7 @@ cd MagiAttention
 git submodule update --init --recursive
 pip install --no-build-isolation .
 cd ../
-pip3 install --upgrade huggingface_hub[hf_transfer]
+pip install --upgrade huggingface_hub[hf_transfer]
 export HF_HUB_ENABLE_HF_TRANSFER=1
 huggingface-cli download sand-ai/MAGI-1 \
   --local-dir ./downloads/t5_pretrained/t5-v1_1-xxl \
