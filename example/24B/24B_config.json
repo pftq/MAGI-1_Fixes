@@ -24,7 +24,7 @@
         "gated_linear_unit": true
     },
     "runtime_config": {
-        "cfg_number": 3,
+        "cfg_number": 1,
         "cfg_t_range": [
             0.0,
             0.0217,
@@ -76,10 +76,10 @@
         "cp_size": 8,
         "cp_strategy": "cp_ulysses",
         "ulysses_overlap_degree": 1,
-        "fp8_quant": false,
+        "fp8_quant": true,
         "distill_nearly_clean_chunk_threshold": 0.3,
         "shortcut_mode": "8,16,16",
-        "distill": false,
+        "distill": true,
         "kv_offload": true,
         "enable_cuda_graph": false
     }
