@@ -30,7 +30,7 @@ pip install -r requirements.txt --no-build-isolation
 git clone https://github.com/SandAI-org/MagiAttention
 cd MagiAttention
 git submodule update --init --recursive
-pip install --no-build-isolation .
+pip install --no-build-isolation . # make sure to have enough RAM, on Runpod requires at least H100 pod
 cd ../
 pip install --upgrade huggingface_hub[hf_transfer]
 export HF_HUB_ENABLE_HF_TRANSFER=1
