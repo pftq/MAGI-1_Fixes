@@ -1,3 +1,144 @@
+Changes by pftq:
+ - Fixed incorrect CUDA_VISIBLE_DEVICES setting in 4.5B run script (should be 0 for single-gpu, not 1).
+ - Incorrect distill and fp8 settings in config for 24B script (looks for distill/fp8 files in the 24B_base folder).
+ - cfg_number needs to be set to 3 for 24B config or else it'll error with "Please set `cfg_number: 3` in config.json for base model"
+ 
+ Easy instructions for Runpod on PyTorch 2.4 template (including downloading all huggingface model files).
+ - I installed flash-attn separately from the requirements.txt because it was always hanging otherwise.
+ - ffmpeg needs to be installed as an app as well (apt-get) - it's not enough just to do pip install ffmpeg.  This mistake especially is nasty because you'll only find out after waiting 2 hours for a render and it fails at the end.
+ - if you get stuck waiting for magiattention to be installed, make sure you have enough CPU RAM. On Runpod, anything less than the H100 pod will run out of RAM and freeze.
+ ```
+ #create once on new pod
+ export HF_HOME=/workspace/
+ export TZ=America/Los_Angeles
+ 
+ python -m venv venv
+ source /workspace/venv/bin/activate
+ pip install torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0
+ apt-get update
+ apt-get install -y ffmpeg
+ pip install ffmpeg
+ pip install ffmpeg-python
+ git clone https://github.com/pftq/MAGI-1_Fixes/
+ mv MAGI-1_Fixes MAGI-1
+ cd MAGI-1
+ pip install --upgrade wheel setuptools setuptools_scm
+ pip install packaging
+ pip install flash-attn --no-build-isolation
+ sed -i '/flash-attn/d' requirements.txt # exclude flash-attn from requirements
+ pip install -r requirements.txt --no-build-isolation
+ git clone https://github.com/SandAI-org/MagiAttention
+ cd MagiAttention
+ git submodule update --init --recursive
+ pip install --no-build-isolation . # make sure to have enough RAM, on Runpod requires at least H100 pod
+ cd ../
+ pip install --upgrade huggingface_hub[hf_transfer]
+ export HF_HUB_ENABLE_HF_TRANSFER=1
+ huggingface-cli download sand-ai/MAGI-1 \
+   --local-dir ./downloads/t5_pretrained/t5-v1_1-xxl \
+   --include "ckpt/t5/t5-v1_1-xxl/*" \
+   --local-dir-use-symlinks False
+ huggingface-cli download sand-ai/MAGI-1 \
+   --local-dir ./downloads/vae \
+   --include "ckpt/vae/*" \
+   --local-dir-use-symlinks False
+ huggingface-cli download sand-ai/MAGI-1 \
+   --local-dir ./downloads/4.5B_base \
+   --include "ckpt/magi/4.5B_base/*" \
+   --local-dir-use-symlinks False
+ mv ./downloads/t5_pretrained/t5-v1_1-xxl/ckpt/t5/t5-v1_1-xxl/* ./downloads/t5_pretrained/t5-v1_1-xxl/
+ mv ./downloads/vae/ckpt/vae/* ./downloads/vae/
+ mv ./downloads/4.5B_base/ckpt/magi/4.5B_base/* ./downloads/4.5B_base/
+ ```
+ 
+ If trying to use the 24b model instead:
+ ```
+ huggingface-cli download sand-ai/MAGI-1 \
+   --local-dir ./downloads/24B_base \
+   --include "ckpt/magi/24B_base/*" \
+   --local-dir-use-symlinks False
+ mv ./downloads/24B_base/ckpt/magi/24B_base/* ./downloads/24B_base/
+ ```
+ 
+ ```
+ #always run at the start to use persisting drive
+ export HF_HOME=/workspace/
+ export TZ=America/Los_Angeles
+ source /workspace/venv/bin/activate
+ apt-get update
+ apt-get install -y ffmpeg
+ pip install ffmpeg-python
+ cd /workspace/MAGI-1
+ ```
+ 
+ 
+ ```
+ #single-gpu 4.5B
+ export MASTER_ADDR=localhost
+ export MASTER_PORT=6009
+ export GPUS_PER_NODE=1
+ export NNODES=1
+ export WORLD_SIZE=1
+ export CUDA_VISIBLE_DEVICES=0
+ 
+ export PAD_HQ=1
+ export PAD_DURATION=1
+ 
+ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+ export OFFLOAD_T5_CACHE=true
+ export OFFLOAD_VAE_CACHE=true
+ export TORCH_CUDA_ARCH_LIST="8.9;9.0"
+ 
+ MAGI_ROOT=$(git rev-parse --show-toplevel)
+ LOG_DIR=log_$(date "+%Y-%m-%d_%H:%M:%S").log
+ 
+ export PYTHONPATH="$MAGI_ROOT:$PYTHONPATH"
+ python3 inference/pipeline/entry.py \
+     --config_file example/4.5B/4.5B_config.json \
+     --mode t2v \
+     --prompt "Good Boy" \
+     --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-t2v.mp4 \
+     2>&1 | tee $LOG_DIR
+ 
+ 
+ ```
+ 
+ ```
+ #multi-gpu 24B
+ export CUDA_DEVICE_MAX_CONNECTIONS=1
+ export NCCL_ALGO=^NVLS
+ 
+ export PAD_HQ=1
+ export PAD_DURATION=1
+ 
+ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+ export OFFLOAD_T5_CACHE=true
+ export OFFLOAD_VAE_CACHE=true
+ export TORCH_CUDA_ARCH_LIST="8.9;9.0"
+ 
+ GPUS_PER_NODE=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l)
+ DISTRIBUTED_ARGS="
+     --rdzv-backend=c10d \
+     --rdzv-endpoint=localhost:6009 \
+     --nnodes=1 \
+     --nproc_per_node=$GPUS_PER_NODE
+ "
+ 
+ MAGI_ROOT=$(git rev-parse --show-toplevel)
+ LOG_DIR=log_$(date "+%Y-%m-%d_%H:%M:%S").log
+ 
+ export PYTHONPATH="$MAGI_ROOT:$PYTHONPATH"
+ torchrun $DISTRIBUTED_ARGS inference/pipeline/entry.py \
+     --config_file example/24B/24B_config.json \
+     --mode v2v \
+     --prefix_video_path sample.mp4 \
+     --prompt "" \
+     --output_path $(date "+%Y-%m-%d_%H-%M-%S")_magi-v2v.mp4 \
+     2>&1 | tee $LOG_DIR
+ ```
+
+<hr>
+
 ![magi-logo](figures/logo_black.png)
 
 
