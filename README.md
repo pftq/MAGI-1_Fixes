@@ -1,4 +1,3 @@
-
 ![magi-logo](figures/logo_black.png)
 
 
